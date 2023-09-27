@@ -9,7 +9,7 @@ def pytest_addoption(parser):
     parser.addoption('--bn', action='store', default="chrome", help="Choose browser: chrome, remote_chrome or firefox")
     parser.addoption('--h', action='store', default=False, help='Choose headless: True or False')
     parser.addoption('--s', action='store', default={'width': 1920, 'height': 1080}, help='Size window: width,height')
-    parser.addoption('--slow', action='store', default=200, help='Choose slow_mo for robot action')#замедление клика
+    parser.addoption('--slow', action='store', default=200, help='Choose slow_mo for robot action')
     parser.addoption('--t', action='store', default=60000, help='Choose timeout')
     parser.addoption('--l', action='store', default='ru-RU', help='Choose locale')
     parser.addini('qs_to_api_token', default=os.getenv("QASE_TOKEN"), help='Qase app token')
@@ -72,10 +72,7 @@ def get_context(browser, request, start) -> BrowserContext:
         context.set_default_timeout(
             timeout=request.config.getoption('t')
         )
-        context.add_cookies([{'url': 'https://uchi.ru', 'name': 'ab_test_redesign_mainpage_autumn', 'value': 'd'},
-                             {'url': 'https://uchi.ru', 'name': 'ab_test_no_samoreg', 'value': 'a'},
-                             {'url': 'https://uchi.ru', 'name': 'cookieConsent', 'value': 'true'},
-                             {'url': 'https://uchi.ru', 'name': 'autotests', 'value': 'paYeIN3tK0xlqDFsNwwyUF6ytH25WW2M'}])
+        # context.add_cookies([{'url': 'https://example.ru', 'name': 'ab_test', 'value': 'd'}]) добавляем куки, если нужны
         return context
 
     elif start == 'remote':
@@ -86,11 +83,7 @@ def get_context(browser, request, start) -> BrowserContext:
         context.set_default_timeout(
             timeout=request.config.getoption('t')
         )
-        context.add_cookies([{'url': 'https://uchi.ru', 'name': 'ab_test_redesign_mainpage_autumn', 'value': 'd'},
-                             {'url': 'https://uchi.ru', 'name': 'ab_test_no_samoreg', 'value': 'a'},
-                             {'url': 'https://uchi.ru', 'name': 'cookieConsent', 'value': 'true'},
-                             {'url': 'https://uchi.ru', 'name': 'autotests',
-                              'value': 'paYeIN3tK0xlqDFsNwwyUF6ytH25WW2M'}])
+        # context.add_cookies([{'url': 'https://example.ru', 'name': 'ab_test', 'value': 'd'}]) добавляем куки, если нужны
         return context
 
 
