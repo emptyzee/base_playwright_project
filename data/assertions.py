@@ -12,12 +12,9 @@ class Assertions(Base):
         expect(self.page).to_have_url(f"{host.get_base_url()}{uri}", timeout=10000), msg
 
 
-    def check_equals(self, actual, expected, msg):
-        assert actual == expected, msg
-
-
-    def check_is_less_then(self, first, second, msg):
-        assert first < second, msg
+    def have_text(self, locator, text: str, msg): #элемент имеет текст
+        loc = self.page.locator(locator)
+        expect(loc).to_have_text(text), msg
 
 
     def check_presence(self, locator, msg):
@@ -28,6 +25,14 @@ class Assertions(Base):
     def check_absence(self, locator, msg):
         loc = self.page.locator(locator)
         expect(loc).to_be_hidden(timeout=700), msg
+
+
+    def check_equals(self, actual, expected, msg):
+        expect(actual).to_equal(expected, message=msg)
+
+
+    def check_is_less_then(self, first, second, msg):
+        expect(first).to_be_less_then(second, message=msg)
 
 
     def button_is_disabled(self, locator: str) -> bool:
@@ -62,11 +67,6 @@ class Assertions(Base):
     def contain_text(self, locator, text: str, msg): #элемент содержит текст
         loc = self.page.locator(locator)
         expect(loc).to_contain_text(text), msg
-
-
-    def have_text(self, locator, text: str, msg): #локатор имеет текст
-        loc = self.page.locator(locator)
-        expect(loc).to_have_text(text), msg
 
 
     def select_have_values(self, locator, options: list, msg): #Select имеет опции для выбора (опция передается аргументом к проверке)

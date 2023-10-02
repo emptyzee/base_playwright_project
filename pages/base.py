@@ -1,14 +1,40 @@
 from playwright.sync_api import Page, TimeoutError, Response
 from data.environment import host
-from data.constants import Constants
+
 
 class Base:
     def __init__(self, page: Page):
         self.page = page
 
     def open(self, uri) -> Response | None:
-        # self.page.set_extra_http_headers(headers=Constants.headers_auth)
         return self.page.goto(f"{host.get_base_url()}{uri}", wait_until='domcontentloaded')
+
+    def click(self, locator) -> None: #клик, при необходимости сам делает скролл к нужному элементу
+        self.page.locator(locator).click()
+
+    def input(self, locator, data: str) -> None: #ввод в поле
+        self.page.locator(locator).fill(data)
+
+    def get_text(self, element) -> str: #достаем текст
+        return self.page.locator(element).text_content()
+
+    def click_element_by_index(self, selector: str, index: int): #находим элемент по индексу и кликаем
+        elements = self.page.query_selector_all(selector)
+        # Проверка наличия элемента с указанным индексом
+        if 0 <= index < len(elements):
+            # Кликнуть по элементу с указанным индексом
+            elements[index].click()
+        else:
+            print(f"Элемент с индексом {index} не найден.")
+
+    def input_value_by_index(self, selector: str, index: int, data: str): #вводим данные в нужные поля по индексу
+        elements = self.page.query_selector_all(selector)
+        # Проверка наличия элемента с указанным индексом
+        if 0 <= index < len(elements):
+            # Заполнить поле ввода по элементу с указанным индексом
+            elements[index].fill(data)
+        else:
+            print(f"Элемент с индексом {index} не найден.")
 
 
     def wait_for_element(self, locator, timeout=12000) -> None: #ожидание какого то элемента если нужно
@@ -22,38 +48,18 @@ class Base:
 
         return elements
 
-    def input(self, locator, data: str) -> None: #ввод в поле
-        self.page.locator(locator).fill(data)
-
-    def input_value_by_index(self, selector: str, index: int, data: str): #вводим данные в нужные поля по индексу
-        elements = self.page.query_selector_all(selector)
-        if index >= 0 and index < len(elements):
-            elements[index].fill(data)
-        else:
-            raise IndexError("Index is out of range")
-
-    def click(self, locator) -> None: #клик, при необходимости сам делает скролл к нужному элементу
-        self.page.locator(locator).click()
-
-    def click_element_by_index(self, selector: str, index: int): #находим элемент по индексу и кликаем
-        elements = self.page.query_selector_all(selector)
-        if len(elements) > 0:
-            if index >= 0 and index < len(elements):
-                elements[index].click()
-            else:
-                raise IndexError("Index is out of range")
-        else:
-            raise NoSuchElementException("No elements found for the given selector")
 
     def current_url(self) -> str: #возвращает урл
         return self.page.url
 
     def checkbox_by_index(self, selector: str, index: int): #находим чекбокс по инкдексу и кликаем
         elements = self.page.query_selector_all(selector)
-        if index >= 0 and index < len(elements):
+        # Проверка наличия элемента с указанным индексом
+        if 0 <= index < len(elements):
+            # Поставить чек-бокс по элементу с указанным индексом
             elements[index].check()
         else:
-            raise IndexError("Index is out of range")
+            print(f"Элемент с индексом {index} не найден.")
 
 
     def click_first_element(self, locator: str): #кликаем по первому элементу, если по индексу выдает out of range
@@ -96,8 +102,6 @@ class Base:
         self.page.on('dialog', lambda dialog: dialog.accept()) #анонимная функция обрабатывающая событие
         self.click(element)
 
-    def get_text(self, element) -> str: #достаем текст
-        return self.page.locator(element).text_content()
 
     def open_wait_and_switch_to_new_tab(self, element): #ожидаем открытие нового таба и свитчаемся
         with self.page.context.expect_page() as tab:

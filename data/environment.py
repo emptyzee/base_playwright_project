@@ -6,8 +6,8 @@ class Environment:
     PROD = 'prod'
 
     URLS = {
-        SHOT: 'https://ts01.shot-uchi.ru/',
-        PROD: 'https://uchi.ru/'
+        SHOT: 'https://example.ru/',
+        PROD: 'https://saucedemo.com/'
     }
 
     def __init__(self):

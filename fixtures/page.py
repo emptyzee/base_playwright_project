@@ -12,7 +12,7 @@ def pytest_addoption(parser):
     parser.addoption('--slow', action='store', default=200, help='Choose slow_mo for robot action')
     parser.addoption('--t', action='store', default=60000, help='Choose timeout')
     parser.addoption('--l', action='store', default='ru-RU', help='Choose locale')
-    parser.addini('qs_to_api_token', default=os.getenv("QASE_TOKEN"), help='Qase app token')
+    # parser.addini('qs_to_api_token', default=os.getenv("QASE_TOKEN"), help='Qase app token')
 
 
 
