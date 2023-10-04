@@ -28,11 +28,11 @@ class Assertions(Base):
 
 
     def check_equals(self, actual, expected, msg):
-        expect(actual).to_equal(expected, message=msg)
+        assert actual == expected, msg
 
 
     def check_is_less_then(self, first, second, msg):
-        expect(first).to_be_less_then(second, message=msg)
+        assert first < second, msg
 
 
     def button_is_disabled(self, locator: str) -> bool:

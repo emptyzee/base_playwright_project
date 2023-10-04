@@ -3,7 +3,7 @@ import os
 
 class Constants:
     try:
-        login2 = os.getenv('PROD_LOGIN1')
-        password2 = os.getenv('PROD_PW1')
+        login = os.getenv('AUTH_LOGIN')
+        password = os.getenv('AUTH_PASSWORD')
     except KeyError:
         print("LOGIN OR PW WASN'T FOUND")

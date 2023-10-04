@@ -5,5 +5,6 @@ load_dotenv() #нужно, чтобы  переменные окружения, 
 # из файла .env, актуально только для локальных прогонов, для запуска через CI, переменные храняться в secrets.
 
 pytest_plugins = [
-    'fixtures.page'
+    'fixtures.page',
+    'fixtures.user_auth'
 ]
