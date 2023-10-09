@@ -10,7 +10,7 @@ class Base:
         return self.page.goto(f"{host.get_base_url()}{uri}", wait_until='domcontentloaded')
 
     def click(self, locator) -> None: #клик, при необходимости сам делает скролл к нужному элементу
-        self.page.locator(locator).click()
+        self.page.click(locator)
 
     def input(self, locator, data: str) -> None: #ввод в поле
         self.page.locator(locator).fill(data)
@@ -19,22 +19,10 @@ class Base:
         return self.page.locator(element).text_content()
 
     def click_element_by_index(self, selector: str, index: int): #находим элемент по индексу и кликаем
-        elements = self.page.query_selector_all(selector)
-        # Проверка наличия элемента с указанным индексом
-        if 0 <= index < len(elements):
-            # Кликнуть по элементу с указанным индексом
-            elements[index].click()
-        else:
-            print(f"Элемент с индексом {index} не найден.")
+        self.page.locator(selector).nth(index).click()
 
     def input_value_by_index(self, selector: str, index: int, data: str): #вводим данные в нужные поля по индексу
-        elements = self.page.query_selector_all(selector)
-        # Проверка наличия элемента с указанным индексом
-        if 0 <= index < len(elements):
-            # Заполнить поле ввода по элементу с указанным индексом
-            elements[index].fill(data)
-        else:
-            print(f"Элемент с индексом {index} не найден.")
+        self.page.locator(selector).nth(index).fill(data)
 
 
     def wait_for_element(self, locator, timeout=12000) -> None: #ожидание какого то элемента если нужно
