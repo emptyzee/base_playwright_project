@@ -9,20 +9,20 @@ class Base:
     def open(self, uri) -> Response | None:
         return self.page.goto(f"{host.get_base_url()}{uri}", wait_until='domcontentloaded')
 
-    def click(self, locator) -> None: #клик, при необходимости сам делает скролл к нужному элементу
+    def click(self, locator: str) -> None: #клик, при необходимости сам делает скролл к нужному элементу
         self.page.click(locator)
 
-    def input(self, locator, data: str) -> None: #ввод в поле
+    def input(self, locator: str, data: str) -> None: #ввод в поле
         self.page.locator(locator).fill(data)
 
-    def get_text(self, element) -> str: #достаем текст
-        return self.page.locator(element).text_content()
+    def get_text(self, locator: str) -> str: #достаем текст
+        return self.page.locator(locator).text_content()
 
-    def click_element_by_index(self, selector: str, index: int): #находим элемент по индексу и кликаем
-        self.page.locator(selector).nth(index).click()
+    def click_element_by_index(self, locator: str, index: int) -> None: #находим элемент по индексу и кликаем
+        self.page.locator(locator).nth(index).click()
 
-    def input_value_by_index(self, selector: str, index: int, data: str): #вводим данные в нужные поля по индексу
-        self.page.locator(selector).nth(index).fill(data)
+    def input_value_by_index(self, locator: str, index: int, data: str) -> None: #вводим данные в нужные поля по индексу
+        self.page.locator(locator).nth(index).fill(data)
 
 
     def wait_for_element(self, locator, timeout=12000) -> None: #ожидание какого то элемента если нужно
@@ -40,8 +40,8 @@ class Base:
     def current_url(self) -> str: #возвращает урл
         return self.page.url
 
-    def checkbox_by_index(self, selector: str, index: int): #находим чекбокс по инкдексу и кликаем
-        elements = self.page.query_selector_all(selector)
+    def checkbox_by_index(self, locator: str, index: int): #находим чекбокс по инкдексу и кликаем
+        elements = self.page.query_selector_all(locator)
         # Проверка наличия элемента с указанным индексом
         if 0 <= index < len(elements):
             # Поставить чек-бокс по элементу с указанным индексом
@@ -63,37 +63,37 @@ class Base:
         input_element.as_element().fill(data)
 
 
-    def checkbox(self, element) -> None: #проверяем является ли элемент чек-боксом и проставляем чекбокс
-        self.page.locator(element).check()
+    def checkbox(self, locator: str) -> None: #проверяем является ли элемент чек-боксом и проставляем чекбокс
+        self.page.locator(locator).check()
 
-    def is_element_present(self, element: str) -> bool:#если элемент есть то все ок
+    def is_element_present(self, locator: str) -> bool:#если элемент есть то все ок
         try:
-            self.page.wait_for_selector(element, timeout=10000)
+            self.page.wait_for_selector(locator, timeout=10000)
         except TimeoutError as e:
             return False
         return True
 
-    def is_element_NOT_presence(self, element: str) -> bool: #если элемента нет, то все ок
+    def is_element_NOT_presence(self, locator: str) -> bool: #если элемента нет, то все ок
         try:
-            self.page.wait_for_selector(element, timeout=5000)
+            self.page.wait_for_selector(locator, timeout=5000)
         except TimeoutError as e:
             return True
         return False
 
-    def selector(self, element, value: str): #выпадающи список, выбираем значение в валуе
-        self.page.select_option(element, value)
+    def selector(self, locator: str, value: str): #выпадающи список, выбираем значение в валуе
+        self.page.select_option(locator, value)
 
     def drag_and_drop(self, source, target): #перетаскивать из-куда то
         self.page.drag_and_drop(source, target)
 
-    def alert_accept(self, element): #сначала идет слушатель, который говорит, что нужно сделать с алертом
+    def alert_accept(self, locator: str): #сначала идет слушатель, который говорит, что нужно сделать с алертом
         self.page.on('dialog', lambda dialog: dialog.accept()) #анонимная функция обрабатывающая событие
-        self.click(element)
+        self.click(locator)
 
 
-    def open_wait_and_switch_to_new_tab(self, element): #ожидаем открытие нового таба и свитчаемся
+    def open_wait_and_switch_to_new_tab(self, locator: str): #ожидаем открытие нового таба и свитчаемся
         with self.page.context.expect_page() as tab:
-            self.click(element)#кликаем на ссылку чтобы открылся новый таб
+            self.click(locator)#кликаем на ссылку чтобы открылся новый таб
         new_tab = tab.value
 
     def close_tab(self, number): #закрываем таб и возвращаемся на предыщущий, number-номер таба который хотим закрыть
