@@ -15,8 +15,8 @@ class Base:
     def input(self, locator: str, data: str) -> None: #ввод в поле
         self.page.locator(locator).fill(data)
 
-    def get_text(self, locator: str) -> str: #достаем текст
-        return self.page.locator(locator).text_content()
+    def get_text(self, locator: str, index: int) -> str: #достаем текст, если локатор один, то в аргумент прокидываем значение 0
+        return self.page.locator(locator).nth(index).text_content()
 
     def click_element_by_index(self, locator: str, index: int) -> None: #находим элемент по индексу и кликаем
         self.page.locator(locator).nth(index).click()
@@ -91,10 +91,13 @@ class Base:
         self.click(locator)
 
 
-    def open_wait_and_switch_to_new_tab(self, locator: str): #ожидаем открытие нового таба и свитчаемся
-        with self.page.context.expect_page() as tab:
-            self.click(locator)#кликаем на ссылку чтобы открылся новый таб
-        new_tab = tab.value
+    def open_new_tab_and_check_presence(self, locclick, locpresence): #ожидаем открытие нового таба и свитчаемся и делаем ассерт, что нужный элемент есть на странице
+        with self.page.expect_popup() as page1_info:
+            self.page.click(locclick)
+        page1 = page1_info.value
+        page1.bring_to_front()
+        loc = page1.locator(locpresence)
+        expect(loc).to_be_visible(visible=True, timeout=12000)
 
     def close_tab(self, number): #закрываем таб и возвращаемся на предыщущий, number-номер таба который хотим закрыть
         all_tabs = self.page.context.pages
