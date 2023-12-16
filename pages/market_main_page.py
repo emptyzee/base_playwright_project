@@ -11,8 +11,8 @@ class MarketPage(Base):
         self.assertions = Assertions(page)
 
 
-    def add_to_card(self):
-        self.click_element_by_index(Market.ADD_TO_CARD, 0) #кликаем по индексу, 0 это значит, что кликаем по первой карточке
+    def add_to_cart(self):
+        self.click_element_by_index(Market.ADD_TO_CART, 0) #кликаем по индексу, 0 это значит, что кликаем по первой карточке
         self.click(Market.FOLLOW_TO_BASKET)
 
     def checkout(self):

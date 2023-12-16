@@ -85,5 +85,5 @@ venv.bak/
 /Screenshots
 qaseio.lock
 failures
-Tests/build
-Tests/qaseio.lock
+tests/build
+tests/qaseio.lock
