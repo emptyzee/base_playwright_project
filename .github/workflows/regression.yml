@@ -23,7 +23,7 @@ jobs:
     name: Regression tests
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright/python:v1.39.0-jammy
+      image: mcr.microsoft.com/playwright/python:v1.41.0-jammy
     env:
       AUTH_LOGIN: ${{ secrets.AUTH_LOGIN }}
       AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
